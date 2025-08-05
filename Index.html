@@ -18,23 +18,35 @@
         <div class="flex-container">
             <div class="section flex-item">
                 <h1>Today's Expense</h1>
-                <p>Date: <strong>04 Aug 2025</strong></p>
+                <p>Date: <strong id="dateOutput">04 Aug 2025</strong></p>
                 <label for="food">Food Expense</label>
-                <input type="text" placeholder="e.g. 50" id="food" />
+                <input type="number" placeholder="e.g. 50" id="food" />
 
                 <label for="other">Other Expense</label>
                 <input type="text" placeholder="e.g. 100" id="other" />
 
-                <button onclick="calculate()">Submit Daily Expense</button>
+                <button onclick="dailyExpense()">Submit Daily Expense</button>
             </div>
 
             <div class="section flex-item">
-                <h1>Set Monthly Budget</h1>
+                <h1>Set Monthly Budget (Once a month)</h1>
                 <p>Total Monthly Budget</p>
-                <input type="text" placeholder="e.g. 10000" id="total"/>
-                <button onclick="getIncome()">Add Monthly Income</button>
-                <h2 id="tExpense">Total Monthly Expense: Rs. 0</h2>
-                <h3 id="rIncome">Remaining Budget: Rs. 0</h3>
+                <input type="number" placeholder="e.g. 10000" id="total" />
+                <button onclick="monthlyIncome()" id="monthlyIncomeBtn">Add Monthly Income</button>
+                <div class="budget-summary">
+                    <div>
+                        <h1>T.Budget</h1>
+                        <h3 id="totalBudgetOutput"></h3>
+                    </div>
+                    <div>
+                        <h1>M.Expense</h1>
+                        <h2 id="monthlyExpenseOutput"></h2>
+                    </div>
+                    <div>
+                        <h1>R.Income</h1>
+                        <h3 id="remainingBudgetOutput"></h3>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -49,18 +61,13 @@
                         <th>Total</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>04 Aug 2025</td>
-                        <td>50</td>
-                        <td>100</td>
-                        <td>150</td>
-                    </tr>
+                <tbody id="reportBody">
+
                 </tbody>
             </table>
         </div>
     </div>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
