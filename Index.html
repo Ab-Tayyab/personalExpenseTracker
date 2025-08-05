@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PET</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Personal Expense Tracker</h1>
+            <p>Keep Track of Your Spending Effortlessly</p>
+        </header>
+
+        <div class="flex-container">
+            <div class="section flex-item">
+                <h1>Today's Expense</h1>
+                <p>Date: <strong>04 Aug 2025</strong></p>
+                <label for="food">Food Expense</label>
+                <input type="text" placeholder="e.g. 50" id="food" />
+
+                <label for="other">Other Expense</label>
+                <input type="text" placeholder="e.g. 100" id="other" />
+
+                <button onclick="calculate()">Submit Daily Expense</button>
+            </div>
+
+            <div class="section flex-item">
+                <h1>Set Monthly Budget</h1>
+                <p>Total Monthly Budget</p>
+                <input type="text" placeholder="e.g. 10000" id="total"/>
+                <button onclick="getIncome()">Add Monthly Income</button>
+                <h2 id="tExpense">Total Monthly Expense: Rs. 0</h2>
+                <h3 id="rIncome">Remaining Budget: Rs. 0</h3>
+            </div>
+        </div>
+
+        <div class="section">
+            <h1>Daily Report</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Food Expense</th>
+                        <th>Other Expense</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>04 Aug 2025</td>
+                        <td>50</td>
+                        <td>100</td>
+                        <td>150</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script src="script.js"></script>
+</body>
+
+</html>

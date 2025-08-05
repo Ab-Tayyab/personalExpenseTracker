@@ -1,0 +1,138 @@
+
+         * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f0f4f8;
+      color: #2c3e50;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #00a8e8;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .section h1 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #0099cc;
+    }
+
+    .section p {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f9fcff;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .output-box {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #e3f2fd;
+      border-left: 5px solid #00aaff;
+      border-radius: 6px;
+    }
+
+    .output-box h2,
+    .output-box h3 {
+      margin-bottom: 8px;
+      color: #005f73;
+    }
+
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .flex-item {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    table thead {
+      background-color: #00aaff;
+      color: white;
+    }
+
+    table th, table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table tbody tr:nth-child(even) {
+      background-color: #f7fbff;
+    }
+
+    @media (max-width: 768px) {
+      .flex-container {
+        flex-direction: column;
+      }
+    }
