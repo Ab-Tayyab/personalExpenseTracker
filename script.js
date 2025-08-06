@@ -9,11 +9,10 @@ document.getElementById('dateOutput').textContent = fullDate;
 // get daily expense 
 function dailyExpense() {
     let totalDailyExpense = 0;
-    let getValue = '';
-    let otherTotal = 0;
+    let setDate = document.getElementById('date').value
     let foodExpense = Number(document.getElementById('food').value);
     let otherExpense = document.getElementById('other');
-    let splitData = otherExpense.value.split('')
+
 
     // if input field have no value 
     if (!foodExpense && otherExpense.value.trim() === '') {
@@ -21,20 +20,8 @@ function dailyExpense() {
         return
     }
     // get digit value from string 
-    for (let i = 0; i < splitData.length; i++) {
-        if (splitData[i] >= 0 || splitData[i] <= 9) {
-            getValue += splitData[i];
-        }
-        else {
-            if (getValue != '') {
-                otherTotal += Number(getValue);
-                getValue = ''
-            }
-        }
-    }
-    if (getValue != '') {
-        otherTotal = Number(getValue)
-    }
+    const digitGroups = otherExpense.value.match(/\d+/g) || [];
+    const otherTotal = digitGroups.reduce((sum, val) => sum + Number(val), 0);
     totalDailyExpense = otherTotal + foodExpense;
 
     // initialize object and array 
@@ -50,7 +37,7 @@ function dailyExpense() {
     if (totalDailyExpense > 0) {
 
         expenseData[monthKey].dailyExpenses.push({
-            date: fullDate,
+            date: setDate,
             food: foodExpense,
             other: otherExpense.value,
             total: totalDailyExpense,
@@ -109,28 +96,15 @@ function calculate() {
 
     // for loop for display data
 
-    for (let i = 0; i < thisMonth.dailyExpenses.length; i++) {
-        let entry = thisMonth.dailyExpenses[i];
-
-        let row = document.createElement('tr')
-        let dateTD = document.createElement('td')
-        dateTD.textContent = entry.date;
-        row.appendChild(dateTD);
-
-        let foodTD = document.createElement('td')
-        foodTD.textContent = entry.food;
-        row.appendChild(foodTD);
-
-        let otherTD = document.createElement('td')
-        otherTD.textContent = entry.other;
-        row.appendChild(otherTD);
-
-        let totalTD = document.createElement('td')
-        totalTD.textContent = entry.total;
-        row.appendChild(totalTD);
+    thisMonth.dailyExpenses.forEach(({ date, food, other, total }) => {
+        let row = document.createElement('tr');
+        [date, food, other, total].forEach(val => {
+            let td = document.createElement('td')
+            td.textContent = val;
+            row.appendChild(td)
+        })
 
         document.getElementById('reportBody').appendChild(row)
-
-    }
+    });
 }
 calculate()

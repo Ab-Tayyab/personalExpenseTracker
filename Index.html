@@ -19,11 +19,18 @@
             <div class="section flex-item">
                 <h1>Today's Expense</h1>
                 <p>Date: <strong id="dateOutput">04 Aug 2025</strong></p>
-                <label for="food">Food Expense</label>
-                <input type="number" placeholder="e.g. 50" id="food" />
+                <div>
+                    <div>
+                        <label for="date">Pick Date</label>
+                        <input type="date" id="date">
 
-                <label for="other">Other Expense</label>
-                <input type="text" placeholder="e.g. 100" id="other" />
+                        <label for="food">Food Expense</label>
+                        <input type="number" placeholder="e.g. 50" id="food" />
+
+                        <label for="other">Other Expense</label>
+                        <input type="text" placeholder="e.g. 100" id="other" />
+                    </div>
+                </div>
 
                 <button onclick="dailyExpense()">Submit Daily Expense</button>
             </div>
