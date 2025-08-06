@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PET</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
 </head>
 
 <body>
@@ -13,6 +15,7 @@
         <header>
             <h1>Personal Expense Tracker</h1>
             <p>Keep Track of Your Spending Effortlessly</p>
+            <button onclick="logout()">Logout</button>
         </header>
 
         <div class="flex-container">
@@ -25,20 +28,20 @@
                         <input type="date" id="date">
 
                         <label for="food">Food Expense</label>
-                        <input type="number" placeholder="e.g. 50" id="food" />
+                        <input type="number" placeholder="e.g. 50" id="food" autocomplete="off"/>
 
                         <label for="other">Other Expense</label>
-                        <input type="text" placeholder="e.g. 100" id="other" />
+                        <input type="text" placeholder="e.g. 100" id="other" autocomplete="off"/>
                     </div>
                 </div>
 
-                <button onclick="dailyExpense()">Submit Daily Expense</button>
+                <button onclick="dailyExpense()" id="dailyBtn">Submit Daily Expense</button>
             </div>
 
             <div class="section flex-item">
                 <h1>Set Monthly Budget (Once a month)</h1>
                 <p>Total Monthly Budget</p>
-                <input type="number" placeholder="e.g. 10000" id="total" />
+                <input type="number" placeholder="e.g. 10000" id="total" autocomplete="off"/>
                 <button onclick="monthlyIncome()" id="monthlyIncomeBtn">Add Monthly Income</button>
                 <div class="budget-summary">
                     <div>
@@ -66,6 +69,7 @@
                         <th>Food Expense</th>
                         <th>Other Expense</th>
                         <th>Total</th>
+                        <th>Edit / Delete</th>
                     </tr>
                 </thead>
                 <tbody id="reportBody">
