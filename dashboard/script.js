@@ -11,6 +11,7 @@ function logout() {
 
 let expenseData = JSON.parse(localStorage.getItem("expenseData")) || {};
 let editIndex = null;
+let showIndex = 5;
 
 const date = new Date();
 const fullDate = date.toISOString().split('T')[0];
@@ -27,8 +28,7 @@ function dailyExpense() {
     const otherExpenseInput = document.getElementById('other');
     const otherText = otherExpenseInput.value.trim();
 
-    if (!setDate) return alert("Enter Date");
-    if (!foodExpense && otherText === '') return alert("Please add at least one entry!");
+    if (!setDate || !foodExpense && otherText === '') return toastExecution('Please add entry!');
 
     //   clean data or extract digits or number from input string 
     const otherTotal = (otherText.match(/\d+/g) || []).reduce((sum, val) => sum + Number(val), 0);
@@ -51,8 +51,10 @@ function dailyExpense() {
             thisMonth.dailyExpenses[editIndex] = newEntry;
             editIndex = null;
             document.getElementById('dailyBtn').textContent = "Submit Daily Expense";
+            toastExecution('Entry Update Successfully!')
         } else {
             thisMonth.dailyExpenses.push(newEntry);
+            toastExecution('Entry Add Successfully!')
         }
 
         expenseData[monthKey] = thisMonth;
@@ -64,7 +66,7 @@ function dailyExpense() {
         document.getElementById('other').value = '';
         calculate();
     } else {
-        alert("Not Valid Value");
+        toastExecution('Not Valid Value!')
     }
 }
 
@@ -87,6 +89,8 @@ function monthlyIncome() {
     calculate();
 }
 
+// calculate and show data 
+
 function calculate() {
     if (!thisMonth) return;
 
@@ -103,35 +107,48 @@ function calculate() {
     //   create table and other html attribute dynamically 
 
     thisMonth.dailyExpenses.forEach(({ date, food, other, total }, index) => {
-        const row = document.createElement('tr');
+        if (index < showIndex) {
+            const row = document.createElement('tr');
 
-        [date, food, other, total].forEach(val => {
+            [date, food, other, total].forEach(val => {
+                const td = document.createElement('td');
+                td.textContent = val;
+                row.appendChild(td);
+            });
+
             const td = document.createElement('td');
-            td.textContent = val;
+
+            const editBtn = document.createElement('button');
+            editBtn.id = `edit-btn-${index}`;
+            editBtn.onclick = () => editEntry(index);
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.style.marginRight = "5px";
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.id = `delete-btn-${index}`;
+            deleteBtn.onclick = () => deleteEntry(index);
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+
+            td.appendChild(editBtn);
+            td.appendChild(deleteBtn);
             row.appendChild(td);
-        });
 
-        const td = document.createElement('td');
-
-        const editBtn = document.createElement('button');
-        editBtn.id = `edit-btn-${index}`;
-        editBtn.onclick = () => editEntry(index);
-        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-        editBtn.style.marginRight = "5px";
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.id = `delete-btn-${index}`;
-        deleteBtn.onclick = () => deleteEntry(index);
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-
-        td.appendChild(editBtn);
-        td.appendChild(deleteBtn);
-        row.appendChild(td);
-
-        reportBody.appendChild(row);
+            reportBody.appendChild(row);
+        }
     });
+    let showBtn = document.getElementById('showMore');
+    if (thisMonth.dailyExpenses.length <= showIndex) {
+        showBtn.style.display = 'none'
+    }
+    else {
+        showBtn.style.display = 'inline-block'
+    }
 }
 
+function showMore() {
+    showIndex += 5;
+    calculate()
+}
 // delete entry by index 
 function deleteEntry(index) {
     if (confirm("Do you want to delete this entry?")) {
@@ -151,6 +168,25 @@ function editEntry(index) {
 
     editIndex = index;
     document.getElementById('dailyBtn').textContent = "Update";
+}
+
+// toast notification 
+
+let toast = document.getElementById('toast');
+let toastHeading = document.getElementById('toast-content');
+
+function toastExecution(content) {
+    toastHeading.textContent = content;
+    toast.classList.remove('disable');
+    toast.classList.add('active');
+    setTimeout(() => {
+        toast.classList.remove('active');
+    }, 3000);
+}
+
+function closeToast() {
+    toast.classList.remove('active');
+    toast.classList.add('disable');
 }
 
 calculate();

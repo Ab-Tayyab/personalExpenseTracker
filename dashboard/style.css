@@ -9,6 +9,7 @@ body {
   background: #f0f4f8;
   color: #2c3e50;
   padding: 20px;
+  position: relative;
 }
 
 .container {
@@ -182,3 +183,57 @@ table tbody tr:nth-child(even) {
     flex-direction: column;
   }
 }
+
+/* toast notification  */
+
+ #toast {
+      display: none;
+      position: absolute;
+      top: 5%;
+      right: 0;
+      transform: translateX(-10%) translateY(-2.5px);
+      min-width: 300px;
+      max-width: 500px;
+      padding: 10px 10px;
+      border-radius: 8px;
+      background-color: #0099cc;
+      color: #ffffff;
+      z-index: 1000;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      transition: opacity 1s ease, transform 0.5s ease;
+    }
+
+    #toast.active {
+      display: block !important;
+      opacity: 1;
+    }
+
+    #toast.disable {
+      display: none !important;
+      opacity: 0;
+    }
+
+    .toast-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      font-size: 0.5rem;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: -30px;
+      bottom: -10px;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: red;
+    }

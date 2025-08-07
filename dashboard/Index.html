@@ -28,10 +28,10 @@
                         <input type="date" id="date">
 
                         <label for="food">Food Expense</label>
-                        <input type="number" placeholder="e.g. 50" id="food" autocomplete="off"/>
+                        <input type="number" placeholder="e.g. 50" id="food" autocomplete="off" />
 
                         <label for="other">Other Expense</label>
-                        <input type="text" placeholder="e.g. 100" id="other" autocomplete="off"/>
+                        <input type="text" placeholder="e.g. 100" id="other" autocomplete="off" />
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@
             <div class="section flex-item">
                 <h1>Set Monthly Budget (Once a month)</h1>
                 <p>Total Monthly Budget</p>
-                <input type="number" placeholder="e.g. 10000" id="total" autocomplete="off"/>
+                <input type="number" placeholder="e.g. 10000" id="total" autocomplete="off" />
                 <button onclick="monthlyIncome()" id="monthlyIncomeBtn">Add Monthly Income</button>
                 <div class="budget-summary">
                     <div>
@@ -76,6 +76,13 @@
 
                 </tbody>
             </table>
+            <button onclick="showMore()" id="showMore">Show More</button>
+        </div>
+    </div>
+    <div id="toast" class="disable">
+        <div class="toast-content">
+            <button class="close-btn" onclick="closeToast()">×</button>
+            <h1 id="toast-content">Toast Message</h1>
         </div>
     </div>
     <script src="script.js"></script>
