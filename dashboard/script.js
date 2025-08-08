@@ -1,3 +1,32 @@
+// {
+//   "totalFunds": 65000, 
+//   "months": [
+//     {
+//       "monthKey": "2025-08",
+//       "dailyExpenses": [
+//         {
+//           "date": "2025-08-08",
+//           "food": 150,
+//           "other": "7000 Hostel Rent",
+//           "total": 7150
+//         }
+//       ]
+//     },
+//     {
+//       "monthKey": "2025-09",
+//       "dailyExpenses": [
+//         {
+//           "date": "2025-09-03",
+//           "food": 200,
+//           "other": "Taxi",
+//           "total": 500
+//         }
+//       ]
+//     }
+//   ]
+// }
+
+
 // Redirect if not logged in
 if (localStorage.getItem("isLoggedIn") !== "true") {
     window.location.href = "../outh/login.html";
