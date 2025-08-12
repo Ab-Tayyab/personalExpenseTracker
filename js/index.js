@@ -1,42 +1,32 @@
-// {
-//   "totalFunds": 65000, 
+
+// const api = {
+//   "totalFunds": 65000,
 //   "months": [
 //     {
 //       "monthKey": "2025-08",
+//       "monthlyBudget": 30000,
 //       "dailyExpenses": [
 //         {
 //           "date": "2025-08-08",
 //           "food": 150,
 //           "other": "7000 Hostel Rent",
-//           "total": 7150
+//           "total": 7150,
+//           "remainingAfterExpense": 22850
 //         }
-//       ]
+//       ],
+//       "monthlyExpenseTotal": 7150,
+//       "monthlyRemaining": 22850
 //     },
-//     {
-//       "monthKey": "2025-09",
-//       "dailyExpenses": [
-//         {
-//           "date": "2025-09-03",
-//           "food": 200,
-//           "other": "Taxi",
-//           "total": 500
-//         }
-//       ]
-//     }
-//   ]
+//   ],
+//   "overall": {
+//     "totalBudget": 50000,         
+//     "totalExpenses": 7650,        
+//     "totalRemaining": 42350,      
+//     "averageDailyExpense": 3825,  
+//     "percentageSpent": "15.3%"    
+//   }
 // }
 
-
-// Redirect if not logged in
-if (localStorage.getItem("isLoggedIn") !== "true") {
-    window.location.href = "../outh/login.html";
-}
-
-// Logout function
-function logout() {
-    localStorage.removeItem("isLoggedIn");
-    window.location.href = "../outh/login.html";
-}
 
 let expenseData = JSON.parse(localStorage.getItem("expenseData")) || {};
 let editIndex = null;
@@ -133,7 +123,29 @@ function calculate() {
     const reportBody = document.getElementById('reportBody');
     reportBody.innerHTML = '';
 
-    //   create table and other html attribute dynamically 
+    
+// delete entry by index 
+function deleteEntry(index) {
+    if (confirm("Do you want to delete this entry?")) {
+        thisMonth.dailyExpenses.splice(index, 1);
+        expenseData[monthKey] = thisMonth;
+        localStorage.setItem('expenseData', JSON.stringify(expenseData));
+        calculate();
+    }
+}
+
+// edit entry by index 
+function editEntry(index) {
+    const entry = thisMonth.dailyExpenses[index];
+    document.getElementById('date').value = entry.date;
+    document.getElementById('food').value = entry.food;
+    document.getElementById('other').value = entry.other;
+
+    editIndex = index;
+    document.getElementById('dailyBtn').textContent = "Update";
+}
+
+//   create table and other html attribute dynamically 
 
     thisMonth.dailyExpenses.forEach(({ date, food, other, total }, index) => {
         if (index < showIndex) {
@@ -178,27 +190,6 @@ function showMore() {
     showIndex += 5;
     calculate()
 }
-// delete entry by index 
-function deleteEntry(index) {
-    if (confirm("Do you want to delete this entry?")) {
-        thisMonth.dailyExpenses.splice(index, 1);
-        expenseData[monthKey] = thisMonth;
-        localStorage.setItem('expenseData', JSON.stringify(expenseData));
-        calculate();
-    }
-}
-
-// edit entry by index 
-function editEntry(index) {
-    const entry = thisMonth.dailyExpenses[index];
-    document.getElementById('date').value = entry.date;
-    document.getElementById('food').value = entry.food;
-    document.getElementById('other').value = entry.other;
-
-    editIndex = index;
-    document.getElementById('dailyBtn').textContent = "Update";
-}
-
 // toast notification 
 
 let toast = document.getElementById('toast');
@@ -218,4 +209,18 @@ function closeToast() {
     toast.classList.add('disable');
 }
 
+
+// Redirect if not logged in
+if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "../structure/login.html";
+}
+
+// Logout function
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "../structure/login.html";
+}
+
+
 calculate();
+
