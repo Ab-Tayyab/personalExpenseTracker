@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Container</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+      }
+
+      header {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 15px;
+        background: #2c3e50;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background: #3498db;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #2980b9;
+      }
+
+      .active {
+        background: #1abc9c !important;
+      }
+
+      iframe {
+        width: 100%;
+        height: calc(100vh - 60px);
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="streakBtn" class="active">Streak</button>
+      <button id="trackerBtn">Expense Tracker</button>
+      <button onclick="logout()">Logout</button>
+    </header>
+
+    <iframe id="contentFrame" src="/structure/streak.html"></iframe>
+
+    <script>
+      const streakBtn = document.getElementById("streakBtn");
+      const trackerBtn = document.getElementById("trackerBtn");
+      const contentFrame = document.getElementById("contentFrame");
+
+      streakBtn.addEventListener("click", () => {
+        contentFrame.src = "/structure/streak.html";
+        streakBtn.classList.add("active");
+        trackerBtn.classList.remove("active");
+      });
+
+      trackerBtn.addEventListener("click", () => {
+        contentFrame.src = "/structure/tracker.html";
+        trackerBtn.classList.add("active");
+        streakBtn.classList.remove("active");
+      });
+    </script>
+    <script src="/js/tracker.js"></script>
+  </body>
+</html>
