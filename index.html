@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Expense Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="logo.png" type="image/png" />
+    <meta name="theme-color" content="#4CAF50" />
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+      <div class="left">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Loading...</div>
+      </div>
+      <div class="right">
+        <form id="loginForm">
+          <h2 id="formTitle">Enter PIN</h2>
+          <input type="password" id="pin" placeholder="Enter PIN" required />
+          <button type="submit" id="loginBtn">Login</button>
+          <button type="button" class="link-btn" id="editPinBtn">
+            Edit PIN
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tracker Screen -->
+    <div id="trackerScreen" style="display: none">
+      <div class="container">
+        <header>
+          <div class="header-content">
+            <div>
+              <h1>Personal Expense Tracker</h1>
+              <p>Keep Track of Your Spending Effortlessly</p>
+            </div>
+            <button id="logoutBtn" class="logout-btn">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </header>
+
+        <!-- Horizontal flex container -->
+        <div class="flex-container">
+          <!-- Left section -->
+          <div class="section">
+            <h1>Today's Expense</h1>
+            <p>Date: <strong id="dateOutput">04 Aug 2025</strong></p>
+            <label for="expenseDate">Pick Date</label>
+            <input type="date" id="expenseDate" />
+            <label for="amount">Amount</label>
+            <input type="number" placeholder="e.g. 200" id="amount" />
+            <label for="expenseType">Expense Type</label>
+            <select id="expenseType">
+              <option value="">-- Select Expense Type --</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Bike</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Rent</option>
+              <option value="Entertainment">Internet</option>
+              <option value="Entertainment">fruits</option>
+              <option value="Other">Other</option>
+            </select>
+            <button id="dailyBtn">Submit Daily Expense</button>
+          </div>
+
+          <!-- Right section -->
+          <div class="section">
+            <h1>Set Monthly Budget (Once a month)</h1>
+            <p>Total Monthly Budget</p>
+            <input type="number" placeholder="e.g. 10000" id="total" />
+            <button id="monthlyIncomeBtn">Add Monthly Income</button>
+            <div class="budget-summary">
+              <div>
+                <h1>M.Budget</h1>
+                <h3 id="totalBudgetOutput">0</h3>
+              </div>
+              <div>
+                <h1>M.Expense</h1>
+                <h3 id="monthlyExpenseOutput">0</h3>
+              </div>
+              <div>
+                <h1>M.R.Income</h1>
+                <h3 id="remainingBudgetOutput">0</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Data -->
+        <div class="overAllData">
+          <div>
+            <h1>Total Funds</h1>
+            <h3 id="overallTotalFunds">0</h3>
+          </div>
+          <div>
+            <h1>Total Expenses</h1>
+            <h3 id="overallTotalExpenses">0</h3>
+          </div>
+          <div>
+            <h1>Total Remaining</h1>
+            <h3 id="overallTotalRemaining">0</h3>
+          </div>
+          <div>
+            <h1>Avg Daily Expense</h1>
+            <h3 id="overallAvgDaily">0</h3>
+          </div>
+          <div>
+            <h1>% Spent</h1>
+            <h3 id="overallPercentage">0%</h3>
+          </div>
+        </div>
+
+        <!-- Daily Report Table -->
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reportBody"></tbody>
+        </table>
+
+        <button
+          id="showMoreBtn"
+          style="
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #5e9ed6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+          "
+        >
+          Show More
+        </button>
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="disable">
+        <div class="toast-content">
+          <button class="close-btn" onclick="closeToast()">×</button>
+          <h1 id="toast-content">Toast Message</h1>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
