@@ -25,7 +25,9 @@
           <h2 id="formTitle">Enter PIN</h2>
           <input type="password" id="pin" placeholder="Enter PIN" required />
           <button type="submit" id="loginBtn">Login</button>
-          <button type="button" class="link-btn" id="editPinBtn">Edit PIN</button>
+          <button type="button" class="link-btn" id="editPinBtn">
+            Edit PIN
+          </button>
         </form>
       </div>
     </div>
@@ -45,7 +47,7 @@
           </div>
         </header>
 
-        <!-- Horizontal flex container -->
+        <!-- Input Sections -->
         <div class="flex-container">
           <!-- Left section -->
           <div class="section">
@@ -109,60 +111,65 @@
             <h3 id="overallTotalRemaining">0</h3>
           </div>
         </div>
+
         <!-- Charts -->
         <div class="charts">
-          <canvas id="pieChart"></canvas>
-          <canvas id="lineChart"></canvas>
+          <div class="chart-box">
+            <canvas id="pieChart"></canvas>
+          </div>
+          <div class="chart-box">
+            <canvas id="lineChart"></canvas>
+          </div>
         </div>
       </div>
-        <!-- Search + Table -->
-        <div class="table-section">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search expenses..."
-            class="search-bar"
-          />
 
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="reportBody"></tbody>
-          </table>
+      <!-- Search + Table -->
+      <div class="table-section">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search expenses..."
+        />
 
-          <button
-            id="showMoreBtn"
-            style="
-              display: none;
-              margin: 20px auto;
-              padding: 10px 20px;
-              background: #5e9ed6;
-              color: white;
-              border: none;
-              border-radius: 8px;
-              cursor: pointer;
-            "
-          >
-            Show More
-          </button>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reportBody"></tbody>
+        </table>
 
-
+        <button
+          id="showMoreBtn"
+          style="
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #5e9ed6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+          "
+        >
+          Show More
+        </button>
+      </div>
 
       <!-- Toast Notification -->
       <div id="toast" class="disable">
         <div class="toast-content">
           <button class="close-btn" onclick="closeToast()">×</button>
-          <h1 id="toast-content">Toast Message</h1>
+          <p id="toast-content">Toast Message</p>
         </div>
       </div>
     </div>
+
+    
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

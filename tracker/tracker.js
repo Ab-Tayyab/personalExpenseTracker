@@ -3,6 +3,7 @@ import { saveMonthData, getMonthData, getAllMonths } from "../db/indexedDB.js";
 import { toastExecution } from "../utils/toast.js";
 import { updateExpenseTable, updateStatsUI, updateOverallUI, renderTable } from "./ui.js";
 
+
 let editIndex = null;
 let showIndex = 5;
 let currentMonthKey = null;
