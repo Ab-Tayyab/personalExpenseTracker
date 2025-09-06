@@ -1,4 +1,4 @@
-const CACHE_NAME = "expense-tracker-cache-v1";
+const CACHE_NAME = "expense-tracker-v2"; // bump version when updating
 const ASSETS = [
   "/",
   "/index.html",
@@ -8,31 +8,39 @@ const ASSETS = [
   "/logo.png"
 ];
 
-// Install SW
+// Install: cache app shell
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
+  self.skipWaiting(); // activate new SW immediately
 });
 
-// Activate SW
+// Activate: clear old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      )
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
     )
   );
+  self.clients.claim(); // take control right away
 });
 
-// Fetch requests
+// Fetch: stale-while-revalidate strategy
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(
-      (cached) => cached || fetch(event.request)
-    )
+    caches.match(event.request).then((cachedResponse) => {
+      const networkFetch = fetch(event.request)
+        .then((networkResponse) => {
+          // update cache in background
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+          });
+          return networkResponse;
+        })
+        .catch(() => cachedResponse); // fallback to cache if offline
+
+      return cachedResponse || networkFetch;
+    })
   );
 });

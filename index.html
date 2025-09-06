@@ -9,7 +9,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="logo.png" type="image/png" />
     <meta name="theme-color" content="#4CAF50" />
@@ -26,9 +25,7 @@
           <h2 id="formTitle">Enter PIN</h2>
           <input type="password" id="pin" placeholder="Enter PIN" required />
           <button type="submit" id="loginBtn">Login</button>
-          <button type="button" class="link-btn" id="editPinBtn">
-            Edit PIN
-          </button>
+          <button type="button" class="link-btn" id="editPinBtn">Edit PIN</button>
         </form>
       </div>
     </div>
@@ -111,45 +108,52 @@
             <h1>Total Remaining</h1>
             <h3 id="overallTotalRemaining">0</h3>
           </div>
-          <div>
-            <h1>Avg Daily Expense</h1>
-            <h3 id="overallAvgDaily">0</h3>
-          </div>
-          <div>
-            <h1>% Spent</h1>
-            <h3 id="overallPercentage">0%</h3>
-          </div>
+        </div>
+        <!-- Charts -->
+        <div class="charts">
+          <canvas id="pieChart"></canvas>
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+        <!-- Search + Table -->
+        <div class="table-section">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search expenses..."
+            class="search-bar"
+          />
+
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="reportBody"></tbody>
+          </table>
+
+          <button
+            id="showMoreBtn"
+            style="
+              display: none;
+              margin: 20px auto;
+              padding: 10px 20px;
+              background: #5e9ed6;
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+            "
+          >
+            Show More
+          </button>
         </div>
 
-        <!-- Daily Report Table -->
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="reportBody"></tbody>
-        </table>
 
-        <button
-          id="showMoreBtn"
-          style="
-            display: none;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background: #5e9ed6;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-          "
-        >
-          Show More
-        </button>
-      </div>
 
       <!-- Toast Notification -->
       <div id="toast" class="disable">
@@ -160,6 +164,8 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>
