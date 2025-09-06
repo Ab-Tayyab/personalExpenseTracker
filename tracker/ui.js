@@ -15,6 +15,9 @@ const els = {
   searchInput: document.getElementById("searchInput"),
 };
 
+let lastThisMonth = null;
+let delegateAttached = false;
+
 export function showLogin() {
   els.loginScreen.style.display = "flex";
   els.trackerScreen.style.display = "none";
@@ -26,71 +29,101 @@ export function showTracker() {
   calculate();
 }
 
-// --- Stats (top cards)
+// Stats update
 export function updateStatsUI(thisMonth, totalMonthlyExpense, remainingIncome) {
   els.monthlyExpenseOutput.textContent = totalMonthlyExpense;
   els.totalBudgetOutput.textContent = thisMonth.monthlyBudget || 0;
   els.remainingBudgetOutput.textContent = remainingIncome;
 }
 
-// --- Overall (bottom row)
+// Overall update
 export function updateOverallUI({ overallFunds, overallExpenses, overallRemaining }) {
   els.overallTotalFunds.textContent = overallFunds;
   els.overallTotalExpenses.textContent = overallExpenses;
   els.overallTotalRemaining.textContent = overallRemaining;
 }
 
-// --- Table
+// Render table (full dataset, searchable)
 export function updateExpenseTable(thisMonth) {
-  els.reportBody.innerHTML = "";
-  const showIndex = getShowIndex();
-
-  thisMonth.dailyExpenses
-    .slice()
-    .reverse()
-    .forEach((entry, reverseIndex) => {
-      const index = thisMonth.dailyExpenses.length - 1 - reverseIndex;
-      if (reverseIndex < showIndex) {
-        els.reportBody.insertAdjacentHTML(
-          "beforeend",
-          `
-          <tr data-index="${index}">
-            <td>${entry.date}</td>
-            <td>${entry.amount}</td>
-            <td>${entry.type}</td>
-            <td class="action-buttons">
-              <button class="edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
-              <button class="delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        `
-        );
-      }
-    });
-
-  els.showMoreBtn.style.display =
-    thisMonth.dailyExpenses.length <= showIndex ? "none" : "block";
-
-  // Event delegation
-  els.reportBody.onclick = (e) => {
-    const row = e.target.closest("tr");
-    if (!row) return;
-    const index = Number(row.dataset.index);
-
-    if (e.target.closest(".edit-btn")) editEntry(index);
-    if (e.target.closest(".delete-btn")) deleteEntry(index);
-  };
+  lastThisMonth = thisMonth;
+  renderTable(""); // no filter -> show top showIndex rows
 }
 
-// --- Search filter (by date/type/amount text match)
+// internal render function: if filterTerm provided, show all matching entries (no pagination)
+export function renderTable(filterTerm = "") {
+  if (!lastThisMonth) return;
+  const all = lastThisMonth.dailyExpenses
+    .map((e, idx) => ({ ...e, __idx: idx })) // preserve original index
+    .slice()
+    .reverse(); // newest first
+
+  const term = (filterTerm || "").trim().toLowerCase();
+
+  let filtered = all;
+  if (term !== "") {
+    filtered = all.filter((item) => {
+      return (
+        String(item.date).toLowerCase().includes(term) ||
+        String(item.amount).toLowerCase().includes(term) ||
+        String(item.type).toLowerCase().includes(term)
+      );
+    });
+  }
+
+  // Decide visible set: if searching -> show all matched; otherwise show up to showIndex
+  const showIndex = getShowIndex();
+  let visible = [];
+  if (term !== "") {
+    visible = filtered;
+  } else {
+    visible = filtered.slice(0, showIndex);
+  }
+
+  // Build HTML
+  els.reportBody.innerHTML = "";
+  visible.forEach((item) => {
+    const idx = item.__idx;
+    els.reportBody.insertAdjacentHTML(
+      "beforeend",
+      `
+      <tr data-index="${idx}">
+        <td>${item.date}</td>
+        <td>${item.amount}</td>
+        <td>${item.type}</td>
+        <td class="action-buttons">
+          <button class="edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+          <button class="delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `
+    );
+  });
+
+  // Show More button visibility: only when not searching and entries exceed showIndex
+  if (term === "" && all.length > showIndex) {
+    els.showMoreBtn.style.display = "block";
+  } else {
+    els.showMoreBtn.style.display = "none";
+  }
+
+  // Attach single delegated click handler once
+  if (!delegateAttached) {
+    els.reportBody.addEventListener("click", (e) => {
+      const row = e.target.closest("tr");
+      if (!row) return;
+      const index = Number(row.dataset.index);
+      if (e.target.closest(".edit-btn")) editEntry(index);
+      if (e.target.closest(".delete-btn")) deleteEntry(index);
+    });
+    delegateAttached = true;
+  }
+}
+
+// Search binder (call during app init)
 export function bindSearch() {
   if (!els.searchInput) return;
-  els.searchInput.addEventListener("input", () => {
-    const term = els.searchInput.value.trim().toLowerCase();
-    const rows = els.reportBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(term) ? "" : "none";
-    });
+  els.searchInput.addEventListener("input", (e) => {
+    const term = (e.target.value || "").trim();
+    renderTable(term);
   });
 }

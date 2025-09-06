@@ -310,6 +310,7 @@ select:focus {
 
 .table-section {
   overflow-x: auto;
+  padding: 10px;
 }
 
 table {

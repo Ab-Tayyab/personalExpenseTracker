@@ -1,7 +1,7 @@
 // /scripts/tracker.js
 import { saveMonthData, getMonthData, getAllMonths } from "../db/indexedDB.js";
 import { toastExecution } from "../utils/toast.js";
-import { updateExpenseTable, updateStatsUI, updateOverallUI } from "./ui.js";
+import { updateExpenseTable, updateStatsUI, updateOverallUI, renderTable } from "./ui.js";
 
 let editIndex = null;
 let showIndex = 5;
@@ -31,7 +31,7 @@ export async function initializeMonth() {
   return { monthKey, thisMonth };
 }
 
-// --- Create/Update entry
+// Create/Update entry
 export async function dailyExpense() {
   const setDate = document.getElementById("expenseDate").value;
   const amount = Number(document.getElementById("amount").value) || 0;
@@ -61,7 +61,7 @@ export async function dailyExpense() {
   calculate();
 }
 
-// --- Set monthly budget
+// Set monthly budget
 export async function monthlyIncome() {
   const totalIncome = Number(document.getElementById("total").value);
   if (!totalIncome || totalIncome <= 0) {
@@ -84,7 +84,7 @@ export async function monthlyIncome() {
   calculate();
 }
 
-// --- Recalculate + redraw UI
+// Recalculate + redraw UI
 export async function calculate() {
   const { thisMonth } = await initializeMonth();
 
@@ -115,14 +115,14 @@ export async function calculate() {
   updateOverallUI({ overallFunds, overallExpenses, overallRemaining });
 
   // Table + Charts
-  updateExpenseTable(thisMonth);
+  updateExpenseTable(thisMonth); // stores lastThisMonth and renders top showIndex rows
   updateCharts(thisMonth);
 
   document.getElementById("monthlyIncomeBtn").disabled =
     thisMonth.monthlyBudget !== null;
 }
 
-// --- Delete
+// Delete
 export async function deleteEntry(index) {
   if (confirm("Do you want to delete this entry?")) {
     const { monthKey, thisMonth } = await initializeMonth();
@@ -134,7 +134,7 @@ export async function deleteEntry(index) {
   }
 }
 
-// --- Edit (prefill form)
+// Edit (prefill form)
 export async function editEntry(index) {
   const { thisMonth } = await initializeMonth();
   const entry = thisMonth.dailyExpenses[index];
@@ -147,7 +147,7 @@ export async function editEntry(index) {
   document.getElementById("dailyBtn").textContent = "Update Entry";
 }
 
-// --- Pagination
+// Pagination control
 export function showMore() {
   showIndex += 5;
   calculate();
@@ -156,7 +156,7 @@ export function getShowIndex() {
   return showIndex;
 }
 
-// --- Charts
+// Charts
 function updateCharts(thisMonth) {
   const pieCanvas = document.getElementById("pieChart");
   const lineCanvas = document.getElementById("lineChart");
@@ -182,7 +182,7 @@ function updateCharts(thisMonth) {
         },
       ],
     },
-    options: { responsive: true, plugins: { legend: { position: "bottom" } } },
+    options: { responsive: true, plugins: { legend: { position: "bottom" } }, maintainAspectRatio: false },
   });
 
   // Line: daily trend (sorted by date)
@@ -212,13 +212,34 @@ function updateCharts(thisMonth) {
         x: { title: { display: true, text: "Date" } },
         y: { title: { display: true, text: "Amount" } },
       },
+      maintainAspectRatio: false,
     },
   });
+
+  // Ensure canvas containers have a height in CSS (we set that in style.css)
 }
 
-// --- helpers
+// helpers
 function clearInputs() {
   document.getElementById("expenseDate").value = "";
   document.getElementById("amount").value = "";
   document.getElementById("expenseType").value = "";
 }
+
+// --- Make sure Show More button works even if app didn't wire it
+(function attachShowMore() {
+  function attach() {
+    const btn = document.getElementById("showMoreBtn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      showIndex += 5;
+      calculate();
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attach);
+  } else {
+    attach();
+  }
+})();
