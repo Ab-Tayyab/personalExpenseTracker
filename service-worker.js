@@ -4,7 +4,7 @@ const ASSETS = [
   "/personalExpenseTracker/",
   "/personalExpenseTracker/index.html",
   "/personalExpenseTracker/style.css",
-  "/personalExpenseTracker/script.js",
+  "/personalExpenseTracker/app.js",
   "/personalExpenseTracker/manifest.json",
   "/personalExpenseTracker/logo.png",
   "/personalExpenseTracker/db/indexedDB.js",
