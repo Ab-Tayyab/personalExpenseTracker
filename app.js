@@ -1,6 +1,6 @@
 // /app.js
 import { openDB, getSetting, saveSetting } from "./db/indexedDB.js";
-import { dailyExpense, monthlyIncome, calculate } from "./tracker/tracker.js";
+import { dailyExpense, monthlyIncome, calculate,editMonthlyIncome  } from "./tracker/tracker.js";
 import { showLogin, showTracker, bindSearch } from "./tracker/ui.js";
 
 // --- Constants
@@ -13,6 +13,7 @@ const formTitle = document.getElementById("formTitle");
 const loginBtn = document.getElementById("loginBtn");
 const editPinBtn = document.getElementById("editPinBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+document.getElementById("editMonthlyIncomeBtn").addEventListener("click", editMonthlyIncome);
 
 // --- App init
 document.addEventListener("DOMContentLoaded", async () => {

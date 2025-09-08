@@ -1,15 +1,13 @@
-// /scripts/tracker.js
 import { saveMonthData, getMonthData, getAllMonths } from "../db/indexedDB.js";
 import { toastExecution } from "../utils/toast.js";
-import { updateExpenseTable, updateStatsUI, updateOverallUI, renderTable } from "./ui.js";
-
+import { updateExpenseTable, updateStatsUI, updateOverallUI } from "./ui.js";
 
 let editIndex = null;
 let showIndex = 5;
 let currentMonthKey = null;
 let currentMonthData = null;
 
-// Chart instances to allow destroy/redraw
+// Chart instances
 let pieChartInstance = null;
 let lineChartInstance = null;
 
@@ -85,6 +83,29 @@ export async function monthlyIncome() {
   calculate();
 }
 
+// ✨ Edit monthly budget
+export async function editMonthlyIncome() {
+  const newIncome = Number(document.getElementById("total").value);
+  if (!newIncome || newIncome <= 0) {
+    toastExecution("Please enter a valid monthly budget!");
+    return;
+  }
+
+  const { monthKey, thisMonth } = await initializeMonth();
+  if (thisMonth.monthlyBudget === null) {
+    toastExecution("No budget set yet! Please set it first.");
+    return;
+  }
+
+  thisMonth.monthlyBudget = newIncome;
+  currentMonthData = thisMonth;
+  await saveMonthData(monthKey, thisMonth);
+
+  document.getElementById("total").value = "";
+  toastExecution("Monthly budget updated successfully!");
+  calculate();
+}
+
 // Recalculate + redraw UI
 export async function calculate() {
   const { thisMonth } = await initializeMonth();
@@ -97,10 +118,8 @@ export async function calculate() {
       ? thisMonth.monthlyBudget - totalMonthlyExpense
       : 0;
 
-  // Top cards
   updateStatsUI(thisMonth, totalMonthlyExpense, remainingIncome);
 
-  // Overall (no avg daily, no % spent)
   const allMonths = await getAllMonths();
   let overallFunds = 0;
   let overallExpenses = 0;
@@ -115,8 +134,7 @@ export async function calculate() {
 
   updateOverallUI({ overallFunds, overallExpenses, overallRemaining });
 
-  // Table + Charts
-  updateExpenseTable(thisMonth); // stores lastThisMonth and renders top showIndex rows
+  updateExpenseTable(thisMonth);
   updateCharts(thisMonth);
 
   document.getElementById("monthlyIncomeBtn").disabled =
@@ -135,7 +153,7 @@ export async function deleteEntry(index) {
   }
 }
 
-// Edit (prefill form)
+// Edit entry
 export async function editEntry(index) {
   const { thisMonth } = await initializeMonth();
   const entry = thisMonth.dailyExpenses[index];
@@ -148,7 +166,7 @@ export async function editEntry(index) {
   document.getElementById("dailyBtn").textContent = "Update Entry";
 }
 
-// Pagination control
+// Pagination
 export function showMore() {
   showIndex += 5;
   calculate();
@@ -163,11 +181,9 @@ function updateCharts(thisMonth) {
   const lineCanvas = document.getElementById("lineChart");
   if (!pieCanvas || !lineCanvas || !window.Chart) return;
 
-  // destroy previous instances
   if (pieChartInstance) pieChartInstance.destroy();
   if (lineChartInstance) lineChartInstance.destroy();
 
-  // Pie: total by type
   const typeTotals = {};
   thisMonth.dailyExpenses.forEach((e) => {
     typeTotals[e.type] = (typeTotals[e.type] || 0) + e.total;
@@ -177,21 +193,16 @@ function updateCharts(thisMonth) {
     type: "pie",
     data: {
       labels: Object.keys(typeTotals),
-      datasets: [
-        {
-          data: Object.values(typeTotals),
-        },
-      ],
+      datasets: [{ data: Object.values(typeTotals) }],
     },
     options: { responsive: true, plugins: { legend: { position: "bottom" } }, maintainAspectRatio: false },
   });
 
-  // Line: daily trend (sorted by date)
   const trendMap = {};
   thisMonth.dailyExpenses.forEach((e) => {
     trendMap[e.date] = (trendMap[e.date] || 0) + e.total;
   });
-  const sortedDates = Object.keys(trendMap).sort(); // ensure ascending x-axis
+  const sortedDates = Object.keys(trendMap).sort();
 
   lineChartInstance = new Chart(lineCanvas, {
     type: "line",
@@ -216,8 +227,6 @@ function updateCharts(thisMonth) {
       maintainAspectRatio: false,
     },
   });
-
-  // Ensure canvas containers have a height in CSS (we set that in style.css)
 }
 
 // helpers
@@ -226,21 +235,3 @@ function clearInputs() {
   document.getElementById("amount").value = "";
   document.getElementById("expenseType").value = "";
 }
-
-// --- Make sure Show More button works even if app didn't wire it
-(function attachShowMore() {
-  function attach() {
-    const btn = document.getElementById("showMoreBtn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-      showIndex += 5;
-      calculate();
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", attach);
-  } else {
-    attach();
-  }
-})();

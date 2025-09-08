@@ -74,11 +74,19 @@
           </div>
 
           <!-- Right section -->
+
           <div class="section">
-            <h1>Set Monthly Budget (Once a month)</h1>
+            <h1>Set Monthly Budget</h1>
             <p>Total Monthly Budget</p>
             <input type="number" placeholder="e.g. 10000" id="total" />
-            <button id="monthlyIncomeBtn">Add Monthly Income</button>
+            <div style="display: flex; gap: 10px; margin-top: 10px">
+              <button id="monthlyIncomeBtn" class="btn btn-primary">
+                Add Monthly Income
+              </button>
+              <button id="editMonthlyIncomeBtn" class="btn btn-edit">
+                Edit
+              </button>
+            </div>
             <div class="budget-summary">
               <div>
                 <h1>M.Budget</h1>
@@ -125,11 +133,7 @@
 
       <!-- Search + Table -->
       <div class="table-section">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search expenses..."
-        />
+        <input type="text" id="searchInput" placeholder="Search expenses..." />
 
         <table>
           <thead>
@@ -168,8 +172,6 @@
         </div>
       </div>
     </div>
-
-    
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
