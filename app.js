@@ -1,6 +1,11 @@
 // /app.js
 import { openDB, getSetting, saveSetting } from "./db/indexedDB.js";
-import { dailyExpense, monthlyIncome, calculate,editMonthlyIncome  } from "./tracker/tracker.js";
+import {
+  dailyExpense,
+  monthlyIncome,
+  calculate,
+  editMonthlyIncome,
+} from "./tracker/tracker.js";
 import { showLogin, showTracker, bindSearch } from "./tracker/ui.js";
 
 // --- Constants
@@ -13,7 +18,9 @@ const formTitle = document.getElementById("formTitle");
 const loginBtn = document.getElementById("loginBtn");
 const editPinBtn = document.getElementById("editPinBtn");
 const logoutBtn = document.getElementById("logoutBtn");
-document.getElementById("editMonthlyIncomeBtn").addEventListener("click", editMonthlyIncome);
+document
+  .getElementById("editMonthlyIncomeBtn")
+  .addEventListener("click", editMonthlyIncome);
 
 // --- App init
 document.addEventListener("DOMContentLoaded", async () => {
@@ -22,7 +29,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // tracker events
   document.getElementById("dailyBtn").addEventListener("click", dailyExpense);
-  document.getElementById("monthlyIncomeBtn").addEventListener("click", monthlyIncome);
+  document
+    .getElementById("monthlyIncomeBtn")
+    .addEventListener("click", monthlyIncome);
   document.getElementById("showMoreBtn").addEventListener("click", () => {
     // imported showMore is not needed here; pressing button triggers it via tracker -> calculate refresh
     const evt = new Event("showMore-request");
@@ -66,7 +75,15 @@ function updateClock() {
   const now = new Date();
   const clockEl = document.getElementById("clock");
   const dateEl = document.getElementById("date");
-  if (clockEl) clockEl.innerText = now.toLocaleTimeString();
+
+  const timeOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true, // 👈 forces 12-hour format
+  };
+
+  if (clockEl) clockEl.innerText = now.toLocaleTimeString([], timeOptions);
   if (dateEl) dateEl.innerText = now.toDateString();
 }
 
