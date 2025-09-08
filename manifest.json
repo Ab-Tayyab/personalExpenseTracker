@@ -1,8 +1,8 @@
 {
   "name": "Expense Tracker",
   "short_name": "Tracker",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/your-repo/index.html",
+  "scope": "/your-repo/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
