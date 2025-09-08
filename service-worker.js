@@ -1,11 +1,16 @@
-const CACHE_NAME = "expense-tracker-v2"; // bump version when updating
+const CACHE_NAME = "expense-tracker-v6"; // bump version on each update
+
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/script.js",
-  "/manifest.json",
-  "/logo.png"
+  "/personalExpenseTracker/",
+  "/personalExpenseTracker/index.html",
+  "/personalExpenseTracker/style.css",
+  "/personalExpenseTracker/script.js",
+  "/personalExpenseTracker/manifest.json",
+  "/personalExpenseTracker/logo.png",
+  "/personalExpenseTracker/db/indexedDB.js",
+  "/personalExpenseTracker/tracker/tracker.js",
+  "/personalExpenseTracker/tracker/ui.js",
+  "/personalExpenseTracker/offline.html" // optional fallback page
 ];
 
 // Install: cache app shell
@@ -26,21 +31,32 @@ self.addEventListener("activate", (event) => {
   self.clients.claim(); // take control right away
 });
 
-// Fetch: stale-while-revalidate strategy
+// Fetch: stale-while-revalidate + fallback
 self.addEventListener("fetch", (event) => {
+  let req = event.request;
+
+  // Fix old wrong root path requests
+  if (req.url.endsWith("/index.html") && !req.url.includes("/personalExpenseTracker/")) {
+    req = new Request("/personalExpenseTracker/index.html");
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const networkFetch = fetch(event.request)
+    caches.match(req).then((cachedResponse) => {
+      const fetchPromise = fetch(req)
         .then((networkResponse) => {
-          // update cache in background
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
-          });
+          if (req.method === "GET" && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(req, networkResponse.clone());
+            });
+          }
           return networkResponse;
         })
-        .catch(() => cachedResponse); // fallback to cache if offline
+        .catch(() => {
+          // If offline, return cached or offline page
+          return cachedResponse || caches.match("/personalExpenseTracker/offline.html");
+        });
 
-      return cachedResponse || networkFetch;
+      return cachedResponse || fetchPromise;
     })
   );
 });
