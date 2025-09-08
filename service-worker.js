@@ -1,16 +1,16 @@
-const CACHE_NAME = "expense-tracker-v3";
+const CACHE_NAME = "expense-tracker-v4";
 
-// IMPORTANT: use relative paths so it works on GitHub Pages
+// cache all essential assets (relative to repo path)
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./script.js",
-  "./manifest.json",
-  "./logo.png",
-  "./db/indexedDB.js",
-  "./tracker/tracker.js",
-  "./tracker/ui.js"
+  "/personalExpenseTracker/",
+  "/personalExpenseTracker/index.html",
+  "/personalExpenseTracker/style.css",
+  "/personalExpenseTracker/script.js",
+  "/personalExpenseTracker/manifest.json",
+  "/personalExpenseTracker/logo.png",
+  "/personalExpenseTracker/db/indexedDB.js",
+  "/personalExpenseTracker/tracker/tracker.js",
+  "/personalExpenseTracker/tracker/ui.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -36,7 +36,7 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(event.request)
         .then((response) => {
-          if (event.request.method === "GET") {
+          if (event.request.method === "GET" && response.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, response.clone());
             });
@@ -45,7 +45,7 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => {
           if (event.request.destination === "document") {
-            return caches.match("./index.html");
+            return caches.match("/personalExpenseTracker/index.html");
           }
         });
     })
